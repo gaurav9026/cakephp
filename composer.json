@@ -28,22 +28,51 @@
         "source": "https://github.com/cakephp/cakephp"
     },
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.2.0",
         "ext-intl": "*",
         "ext-mbstring": "*",
         "cakephp/chronos": "^1.0.1",
         "aura/intl": "^3.0.0",
         "psr/log": "^1.0.0",
-        "zendframework/zend-diactoros": "^1.4.0"
+        "zendframework/zend-diactoros": "^1.4.0",
+        "cakephp/authentication": "1.0.*@dev",
+        "cakephp/authorization": "1.0.*@dev",
+        "cakephp/cakephp": "3.6.*",
+        "cakephp/migrations": "^1.8.0",
+        "cakephp/plugin-installer": "^1.0",
+        "friendsofcake/crud": "^5.4",
+        "giggsey/libphonenumber-for-php": "^8.9",
+        "josegonzalez/dotenv": "3.*",
+        "mobiledetect/mobiledetectlib": "2.*",
+        "muffin/crypt": "^0.1.0",
+        "muffin/trash": "^2.1",
+        "paragonie/certainty": "^1",
+        "paragonie/halite": "^4",
+        "paragonie/sapient": "^1.0",
+        "roave/security-advisories": "dev-master",
+        "openkey/lock": "v5.x-dev"
     },
     "suggest": {
         "ext-openssl": "To use Security::encrypt() or have secure CSRF token generation.",
-        "lib-ICU": "The intl PHP library, to use Text::transliterate() or Text::slug()"
+        "lib-ICU": "The intl PHP library, to use Text::transliterate() or Text::slug()",
+         "markstory/asset_compress": "An asset compression plugin which provides file concatenation and a flexible filter system for preprocessing and minification.",
+        "dereuromark/cakephp-ide-helper": "After baking your code, this keeps your annotations in sync with the code evolving from there on for maximum IDE and PHPStan compatibility.",
+        "phpunit/phpunit": "Allows automated tests to be run without system-wide install."
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7.14|^6.0",
-        "cakephp/cakephp-codesniffer": "^3.0"
+        "cakephp/bake": "^1.1",
+        "cakephp/cakephp-codesniffer": "^3.0",
+        "cakephp/debug_kit": "^3.15.0",
+        "dereuromark/cakephp-ide-helper": "^0.12.0",
+        "phpunit/phpunit": "^7.1",
+        "psy/psysh": "@stable"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@bitbucket.org:openkey-ent/lock.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Cake\\": "src/"
@@ -88,13 +117,16 @@
         "phpunit/phpunit": "<5.7"
     },
     "scripts": {
+        "post-install-cmd": "App\\Console\\Installer::postInstall",
+        "post-create-project-cmd": "App\\Console\\Installer::postInstall",
+        "post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump",
         "check": [
-            "@cs-check",
-            "@test"
+            "@test",
+            "@cs-check"
         ],
-        "cs-check": "phpcs --colors -p ./src ./tests",
-        "cs-fix": "phpcbf --colors ./src ./tests",
-        "test": "phpunit",
+        "cs-check": "phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests",
+        "cs-fix": "phpcbf --colors --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests",
+        "test": "phpunit --colors=always",
         "test-coverage": "phpunit --coverage-clover=clover.xml"
     }
 }
